@@ -1,11 +1,12 @@
-let computerScore = Number(document.querySelector("#computerScore").textContent);;
-let playerScore = Number(document.querySelector("#playerScore").textContent);
-let message = document.querySelector("#message").textContent
-
-
+let computerScore ;
+let playerScore;
+let message ;
 const choicesString = ["Rock", "Paper", "Scissors"];
 const choicesContainer=document.querySelector('#choicesContainer');
 const rounds=5;
+
+
+startGame();
 
 
 function playRound(e) {
@@ -44,25 +45,47 @@ function updateInfos(){
   document.querySelector("#computerScore").textContent=computerScore;
 }
 //show win Message
-//TODO reset function
 function checkWin(){
+  if(playerScore>=5||computerScore >=5){
   if(playerScore >=5){
     message=`You WIN!! you scored first 5 points`;
   }
   else if(computerScore >=5){
-    message =`You lose!! computer scored  first 5 poinst`
+    message =`You lose!! computer scored  first 5 points`
   }
-  //reset function
-  updateInfos();
+  resetGame();
+  }
+}
+//reset
+function resetGame(){
 
+  //delete allchoiceButtons
+const choicesContainer=document.querySelector('#choicesContainer')
+while(choicesContainer.firstChild){
+  choicesContainer.removeChild(choicesContainer.firstChild)
 }
 
+//make a reset Button
+resetButton = document.createElement('button')
+resetButton.textContent='reset';
+resetButton.addEventListener('click',()=>{
+choicesContainer.removeChild(resetButton);
 
+startGame();
+})
+choicesContainer.appendChild(resetButton);
+
+}
 // create buttons and eventListeners
+function startGame(){
+  computerScore=0;
+  playerScore=0;
+  message='Click to start a game';
+  updateInfos();
 choicesString.forEach((choice)=>{
   const button= document.createElement('button');
   button.textContent= choice;
   button.addEventListener('click',playRound)
   choicesContainer.appendChild(button)
-})
+})}
 
