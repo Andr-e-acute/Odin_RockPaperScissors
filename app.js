@@ -53,6 +53,7 @@ function checkWin(){
   else if(computerScore >=5){
     message =`You lose!! computer scored  first 5 points`
   }
+  updateInfos()
   resetGame();
   }
 }
