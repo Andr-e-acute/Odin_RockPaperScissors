@@ -1,35 +1,21 @@
-let computerScore = 0;
-let playerScore = 0;
+let computerScore = Number(document.querySelector("#computerScore").textContent);;
+let playerScore = Number(document.querySelector("#playerScore").textContent);
+let message = document.querySelector("#message").textContent
+
+
 const choicesString = ["Rock", "Paper", "Scissors"];
-
-function getComputerChoice(choicesString) {
-  let randomIndex = Math.floor(Math.random() * choicesString.length);
-  return choicesString[randomIndex];
-}
+const choicesContainer=document.querySelector('#choicesContainer');
+const rounds=5;
 
 
-function userInput(choicesString) {
-  const rawInput = prompt("Choose Rock Paper or Scissors");
-  //convert user Input to first letter capitalized rest lowerCase
-  let formatInput = rawInput
-    .toLocaleLowerCase()
-    .trim()
-    .replace(/(^\w)/, (firstLetter) => firstLetter.toUpperCase());
-
-  if (!choicesString.includes(formatInput)) {
-    alert(`"${rawInput}" is not an allowed Input! 
-    You can only choose between Rock Paper or Scissors`);
-    return userInput(choicesString);
-  }
-  return formatInput;
-}
-
-//compare the choices
-function playRound(playerSelection, computerSelection) {
-  let message = "empty";
-
+function playRound(e) {
+  let computerSelection = getComputerChoice(choicesString);
+  let playerSelection = this.textContent;
+  
+  
   if (playerSelection === computerSelection) {
-    message = `Draw! You chose ${playerSelection}, the computer also chose ${computerSelection}`;
+    message = `Draw! 
+    You chose ${playerSelection}, the computer also chose ${computerSelection}`;
   } else if (playerSelection === "Rock" && computerSelection === "Scissors") {
     playerScore++;
     message = `You win! ${playerSelection} beats ${computerSelection}`;
@@ -43,38 +29,40 @@ function playRound(playerSelection, computerSelection) {
     computerScore++;
     message = `You Lose! ${computerSelection} beats ${playerSelection}`;
   }
-  console.log(computerScore);
-  console.log(message);
+  updateInfos();
+  checkWin();
+  
+}
+function getComputerChoice(choicesString) {
+  let randomIndex = Math.floor(Math.random() * choicesString.length);
+  return choicesString[randomIndex];
+}
+//update the DOM and the variables 
+function updateInfos(){
+  document.querySelector("#playerScore").textContent=playerScore;
+  document.querySelector("#message").textContent=message;
+  document.querySelector("#computerScore").textContent=computerScore;
+}
+//show win Message
+//TODO reset function
+function checkWin(){
+  if(playerScore >=5){
+    message=`You WIN!! you scored first 5 points`;
+  }
+  else if(computerScore >=5){
+    message =`You lose!! computer scored  first 5 poinst`
+  }
+  //reset function
+  updateInfos();
+
 }
 
 
-function game() {
-  const choicesString = ["Rock", "Paper", "Scissors"];
-
-  for (let index = 0; index < 5; index++) {
-    const playerSelection = userInput(choicesString);
-    const computerSelection = getComputerChoice(choicesString);
-    playRound(playerSelection, computerSelection);
-
-  }
-
-  let resultMessage;
-  if (computerScore === playerScore) {
-    resultMessage = `Draw! 
-    Computer scored:${computerScore} 
-    You scored:${playerScore}`;
-  } else if (playerScore > computerScore) {
-    resultMessage = `You win this Round! 
-    Computer scored:${computerScore} 
-    You scored:${playerScore}`;
-  } else if (playerScore < computerScore) {
-    resultMessage = `You lost this Round! 
-                    Computer scored:${computerScore} 
-                    You scored:${playerScore}`;
-  }
-  console.log(resultMessage);
-  computerScore = 0;
-  playerScore = 0;
-}
-game();
+// create buttons and eventListeners
+choicesString.forEach((choice)=>{
+  const button= document.createElement('button');
+  button.textContent= choice;
+  button.addEventListener('click',playRound)
+  choicesContainer.appendChild(button)
+})
 
